@@ -1,0 +1,287 @@
+    header{
+        margin: auto 0;
+        padding: 0;
+        height: 72px;
+        background-color: white;
+        display: block;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+            sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    }
+    body{
+        
+        height: 100%;
+        margin: 0 auto;
+        background-image: url(backim.png);
+        position: relative;
+        
+        
+    }
+    .icon{
+        height: 70px;
+    }
+    .headImage{
+        position: relative;
+        left: 2%;
+    }
+    .buttonstyle{
+        float: right;
+        background-color: black;
+        color:yellow;
+        height: 70px;
+        display: inline;
+        text-align:center;
+        width: 70px;
+        line-height: 60px;
+        font-family: 'Amatic SC',cursive; 
+        font-size: 20px;
+        position: relative;
+        display: inline;
+    }
+    .buttonstyle2{
+        float: right;
+        background-color: yellow;
+        color:black;
+        height: 70px;
+        display: inline;
+        text-align:center;
+        width: 70px;
+        line-height: 60px; 
+        font-family: 'Amatic SC',cursive; 
+        font-size: 20px;
+        position: relative;
+        display: inline;
+        
+    }
+
+    .bodyIcon{
+        height: 100px;
+        width: 700px ;
+        display: flex;
+        justify-content: center;   
+        position: relative;
+        left:25%;
+        font-family: 'Amatic SC',cursive;
+        top: 30px;    
+        
+    }
+    .fixIcon{
+
+        height: 70px;
+        width: 230px;
+        object-fit: fill;
+    }
+    .bodyIconText{
+        height: 100px;
+        width: 700px ;
+        display: block;
+        text-align: center;
+        justify-content: center;   
+        position: relative;
+        left:25%;
+        font-family: 'Amatic SC',cursive;
+        background-color: yellow;
+        color: black;
+        top: 40px;
+        
+        
+    }
+    h2{
+
+        text-align: center;
+        background-color: black;
+        color: yellow;
+        height: 100px;
+        margin-top: -10px;
+    }
+    .mainButton{
+    background-color: black;
+    color:yellow;
+    position: relative;
+    top:30px;
+    height: 35px;
+    width: 200px;
+    border-radius: 5px;
+    }
+    .buttonDiv{
+        position: relative;
+        text-align: center;
+        height: 100px;
+        width: 700px;
+        background-color: yellow;
+        display: inline-block;
+        top: 134px;
+        left: 25%;
+
+    }
+    .galleryVault{
+        margin: 0;
+        padding: 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        position: relative;
+        display: -webkit-flex;
+        display: -moz-flex;
+        display: -ms-flex;
+        display: flex;
+        justify-content: center;
+        min-height: 100vh;
+        top: 250px;
+        width: 1000px;
+    }
+    .gallery_items{
+        position: relative;
+        max-width: 800px;
+        background-color: yellow;
+        height: 400;
+    }
+    .gallery_items2{
+        position: relative;
+        max-width: 800px;
+        background-color: black;
+        color: yellow;
+        height: 400px;
+    }
+    .gallery_items img{
+        max-width: 700px;
+        height: 500px;
+        float: right;
+        
+    }
+    .gallery_items2 img{
+        max-width: 500px;
+        height: 500px;
+        float: right;
+
+    }
+    .gallery_items .text{
+        padding: 20px 0;
+        text-align: center;
+        font-family: 'Kelly Slab', cursive;
+    }
+    .gallery_items2 .text{
+        padding: 20px 0;
+        text-align: center;
+        font-family: 'Kelly Slab', cursive;
+    }
+    .gallery_items .text .tittle{
+        color: #111;
+    }
+    .gallery_items .text p{
+        margin: 20px 0;
+    }
+    .gallery_items2 .text p{
+        margin: 20px 0;
+    }
+    .gallery_items .text a{
+        text-decoration: none;
+        display: inline-block;
+        color: black;
+        border:1px solid #111;
+        padding: 10px 20px;
+        transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -webkit-transition:all 1s ease;
+    }
+    .gallery_items2 .text a{
+        text-decoration: none;
+        display: inline-block;
+        color: yellow;
+        border:1px solid yellow;
+        padding: 10px 20px;
+        transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -webkit-transition:all 1s ease;
+    }
+    .gallery_items .text a:hover{
+        background-color: black;
+        color: yellow;
+    }
+    .gallery_items2 .text a:hover{
+        background-color: yellow;
+        color: black;
+    }
+    .autoplay
+    {
+        position: absolute;
+        color: #000;
+        font: 100px/100% arial, sans-serif;
+        right: 15px;
+        text-decoration: none;
+        text-shadow: 0 1px 0 #fff;
+        top: 15px;
+        width:auto;
+        height:auto;
+        z-index:999;
+        opacity:0.4;
+        transition: opacity .4s ease-in, transform .1s ease-out; 
+        animation: fade_close 2s ease-out;
+    }
+
+    @keyframes fade_close
+    {
+        0% { opacity: 0.8; } 
+        50% { opacity: 0.8; }
+        to { opacity: 0.4; }
+    }
+
+    .autoplay:active
+    {
+    transform:scale(0.6);
+    }
+footer{
+    height: 200px;
+    max-width: 100%;
+    background-color: yellow;
+    position: relative;
+    top:200px;
+    justify-content: center ;
+    display: flex;
+    align-items: center;
+justify-content: center;
+text-align: center;
+
+}
+.iconFoot img{
+    display: flex;
+    height: 60px;
+    width: 200px;
+    position: relative;
+    bottom: 30px;
+}
+.iconS img{
+    
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    position: relative;
+    top:40px;
+    right: 150px;
+}
+.logoFB img{
+    
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    position: relative;
+    top:40px;
+    right: 130px;
+}
+.logoGM img{
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    position: relative;
+    top:40px;
+    right: 110px;
+}
+.aFooter{
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    position: relative;
+    top:70px;
+    right:270px;
+    font-family: 'Kelly Slab', cursive;
+    color: black;
+}
