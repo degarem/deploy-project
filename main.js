@@ -39,3 +39,8 @@ const swiper = new Swiper(".swiper-container", {
     loop: true,
 
 });
+document.getElementById("mainButton").onclick=function(){
+    window.location.href="TovarList.html";
+};
+
+

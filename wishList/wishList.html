@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Reggae+One&display=swap" rel="stylesheet" />
+  <title>wishlist</title>
+  <link rel="icon" type="image/png" href="img/book (1).png" />
+  <link rel="stylesheet" href="wishlist.css" type="text/css" />
+  <link href="https://fonts.googleapis.com/css2?family=Kelly+Slab&display=swap" rel="stylesheet" type="text/css" />
+  <link rel="icon" type="image/png" href="img/book1.png" />
+  
+</head>
+
+<body>
+  <div id="header"></div>
+  <div id="wishList"></div>
+
+  <script src="constants/cataloge.js"></script>
+  <script src="constants/root.js"></script>
+  <script src="utils/localStorage.js"></script>
+  <script src="wishlist.js"></script>
+  <script src="components\Header\header.js"></script>
+  <link rel="stylesheet" href="components\Header\header.css" />
+
+  <section>
+    <div class="container">
+      <div class="col-lg-12 mt-5">
+        <form action="" >
+          <div class="form-group" name="form">
+            <small class="text-muted">Введите номер</small>
+            <input type="text" class="form-control" name="name" id="name" required/>
+            <div class="span"></div>
+            <input type="submit" value="Проверить" class="btns btn-submit" onclick="submit()" />
+          </div>
+          <div class="form-group" name="form">
+            <small class="text-muted">Введите почту</small>
+            <input type="text" class="form-control" name="email" id="email" required  />
+            <div class="span_email" name="form"></div>
+            <input type="submit" value="Проверить" class="btn_email btn-submit" onclick="submit()" required/>
+          </div>
+          <div class="form-group" name="form">
+            <small class="text-muted">Введите имя</small>
+            <input type="text" class="form-control" name="uName" id="uName" required />
+            <div class="span_uName"></div>
+            <input type="submit" value="Проверить" class="btn_uName btn-submit" onclick="submit()" required/>
+          </div>
+      </div>
+      <div class="form-group">
+        <small class="text-muted">Введите индекс</small>
+        <input type="text" class="form-control" name="postCode" id="postCode" required/>
+        <div class="span_postCode"></div>
+        <input type="submit" value="Проверить" class="btn_postCode btn-submit" onclick="submit()" />
+      </div>
+      <div>
+        <button onclick="sucsForm()" class="btn effect04" data-sm-link-text="CLICK" target="_blank"><span>HOVER</span></button>
+      </div>
+      
+      </form>
+    </div>
+    </div>
+  </section>
+  <script>
+    let reg = /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){12,14}(\s*)?$/;
+    let inp = document.querySelector("#name");
+    let span = document.querySelector(".span");
+    document.querySelector(".btns").onclick = function (e) {
+      e.preventDefault();
+      if (!reg.test(inp.value)) {
+        notValid(inp, span, "Проверка не пройдена");
+      } else {
+        valid(inp, span, "");
+      }
+    };
+    function validate(regex, inp) {
+      return regex.test(inp);
+    }
+    function notValid(inp, el, mess) {
+      inp.classList.add("is-invalid");
+      el.innerHTML = mess;
+    }
+    function valid(inp, el, mess) {
+      inp.classList.remove("is-invalid");
+      inp.classList.add("is-valid");
+      el.innerHTML = mess;
+    }
+    let reg2 =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let inp_email = document.querySelector("#email");
+    let span_email = document.querySelector(".span_email");
+    document.querySelector(".btn_email").onclick = function (e) {
+      e.preventDefault();
+      if (!reg2.test(inp_email.value)) {
+        notValid(inp_email, span_email, "Проверка не пройдена");
+      } else {
+        valid(inp_email, span_email, "");
+      }
+    };
+    function validate(regex, inp_email) {
+      return regex.test(inp_email);
+    }
+    function notValid(inp_email, el, mess) {
+      inp.classList.add("is-invalid");
+      el.innerHTML = mess;
+    }
+    function valid(inp_email, el, mess) {
+      inp.classList.remove("is-invalid");
+      inp.classList.add("is-valid");
+      el.innerHTML = mess;
+    }
+    let reg3 = /^[a-z ,А-Яа-я.'-]+$/i;
+    let inp_uName = document.querySelector("#uName");
+    let span_uName = document.querySelector(".span_uName");
+    document.querySelector(".btn_uName").onclick = function (e) {
+      e.preventDefault();
+      if (!reg3.test(inp_uName.value)) {
+        notValid(inp_uName, span_uName, "Проверка не пройдена");
+      } else {
+        valid(inp_uName, span_uName, "");
+      }
+    };
+    function validate(regex, inp_uName) {
+      return regex.test(inp_email);
+    }
+    function notValid(inp_uName, el, mess) {
+      inp.classList.add("is-invalid");
+      el.innerHTML = mess;
+    }
+    function valid(inp_uName, el, mess) {
+      inp.classList.remove("is-invalid");
+      inp.classList.add("is-valid");
+      el.innerHTML = mess;
+    }
+    let reg4 = /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){5}(\s*)?$/;
+    let inp_postCode = document.querySelector("#postCode");
+    let span_postCode = document.querySelector(".span_postCode");
+    document.querySelector(".btn_postCode").onclick = function (e) {
+      e.preventDefault();
+      if (!reg4.test(inp_postCode.value)) {
+        notValid(inp_postCode, span_postCode, "Проверка не пройдена");
+      } else {
+        valid(inp_postCode, span_postCode, "");
+      }
+    };
+    function validate(regex, inp_postCode) {
+      return regex.test(inp_email);
+    }
+    function notValid(inp_postCode, el, mess) {
+      inp.classList.add("is-invalid");
+      el.innerHTML = mess;
+    }
+    function valid(inp_postCode, el, mess) {
+      inp.classList.remove("is-invalid");
+      inp.classList.add("is-valid");
+      el.innerHTML = mess;
+    }
+function sucsForm(){
+  if (!reg.test(inp.value)) {
+        notValid(inp,span,  "Браток введи номер")
+      } else {
+        valid(inp, span, "");
+      }
+      if (!reg2.test(inp_email.value)) {
+        notValid(inp_email,span_email,   "Сэр введите нормально свою почту")
+      } else {
+        valid(inp_email, span_email, "");
+      }
+      if (!reg3.test(inp_uName.value)) {
+        notValid(inp_uName, span_uName,  "Представься бро")
+      } else {
+        valid(inp_uName, span_uName, "");
+      }
+      if (!reg4.test(inp_postCode.value)) {
+        notValid(inp_postCode,span_postCode,   "Куда заказик")
+      } else {
+        valid(inp_postCode, span_postCode, "");
+      }
+}
+
+  
+  </script>
+</body>
+
+</html>

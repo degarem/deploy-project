@@ -1,0 +1,435 @@
+//NOTE: It needs to support IE9 and later and all the greenfield browsers. 
+(function () {
+    //it's very important that the line below doesn't ever change. The back-end looks for this token to replace it with the actual config values for a specific project. 
+   
+var cfg=[{"domain-name":["michaels.com","aaronbrothers.com"],"configuration":{"time-before-offer":60,"time-offer-displayed":20,"time-offer-hidden":60,"wait-time-from-window-load":1,"time-before-next-offer-from-no":432000,"time-before-next-offer-from-yes":1296000,"time-before-next-offer-from-non-offer":86400,"convert-to-purchaser-urls":["michaels.com/on/demandware.store/Sites-MichaelsUS-Site/default/COSummary-Submit","aaronbrothers.com/orderconfirmation?lang=en_US"],"disable-invite-urls":["weeklyad.michaels.com","michaels.com/cart","michaels.com/COSinglePageCheckout/Start","michaels.com/on/demandware.store/Sites-MichaelsUS-Site/default/COSinglePageCheckout-Start","canada.michaels.com/on/demandware.store/Sites-MichaelsCA-Site/default/COSinglePageCheckout-Start","canada.michaels.com/on/demandware.store/Sites-MichaelsCA-Site/default/COSinglePageCheckout/Start","canada.michaels.com/en/cart","canada.michaels.com/on/demandware.store/Sites-MichaelsCA-Site/default/Cart-Show","canada.michaels.com/on/demandware.store/Sites-MichaelsCA-Site/default/COSummary-Submit","canada.michaels.com/on/demandware.store/Sites-MichaelsCA-Site/en/COSummary-Submit","canada.michaels.com/on/demandware.store/Sites-MichaelsCA-Site/en_CA/Cart-MoveBackToCart?pid=10232892&Quantity=1&flag=Canada","canada.michaels.com/on/demandware.store/Sites-MichaelsCA-Site/en/backToCart","canada.michaels.com/backToCart?pid=10030152","michaels.com/on/demandware.store/Sites-MichaelsUS-Site/default/COSinglePageCheckout-Start","michaels.com/on/demandware.store/Sites-MichaelsUS-Site/default/COSinglePageCheckout/Start","michaels.com/cart","michaels.com/on/demandware.store/Sites-MichaelsUS-Site/default/Cart-Show","michaels.com/on/demandware.store/Sites-MichaelsUS-Site/default/COSummary-Submit","michaels.com/on/demandware.store/Sites-MichaelsUS-Site/COSummary-Submit","michaels.com/on/demandware.store/Sites-MichaelsUS-Site/Cart-MoveBackToCart?pid=10232892&Quantity=1&flag=Canada","michaels.com/on/demandware.store/Sites-MichaelsUS-Site/backToCart","michaels.com/backToCart?pid=10030152","canadaonstaging.michaels.com/on/demandware.store/Sites-MichaelsCA-Site/default/COSinglePageCheckout-Start","canadaonstaging.michaels.com/on/demandware.store/Sites-MichaelsCA-Site/default/COSinglePageCheckout/Start","canada.michaels.com/en/cart","canadaonstaging.michaels.com/on/demandware.store/Sites-MichaelsCA-Site/default/Cart-Show","canadaonstaging.michaels.com/on/demandware.store/Sites-MichaelsCA-Site/default/COSummary-Submit","canadaonstaging.michaels.com/on/demandware.store/Sites-MichaelsCA-Site/en/COSummary-Submit","canadaonstaging.michaels.com/on/demandware.store/Sites-MichaelsCA-Site/en_CA/Cart-MoveBackToCart?pid=10232892&Quantity=1&flag=Canada","canadaonstaging.michaels.com/on/demandware.store/Sites-MichaelsCA-Site/en/backToCart","canadaonstaging.michaels.com/en/backToCart?pid=10030152","staging.michaels.com/on/demandware.store/Sites-MichaelsUS-Site/default/COSinglePageCheckout-Start","staging.michaels.com/on/demandware.store/Sites-MichaelsUS-Site/default/COSinglePageCheckout/Start","staging.michaels.com/cart","staging.michaels.com/on/demandware.store/Sites-MichaelsUS-Site/default/Cart-Show","staging.michaels.com/on/demandware.store/Sites-MichaelsUS-Site/default/COSummary-Submit","staging.michaels.com/on/demandware.store/Sites-MichaelsUS-Site/COSummary-Submit","staging.michaels.com/on/demandware.store/Sites-MichaelsUS-Site/Cart-MoveBackToCart?pid=10232892&Quantity=1&flag=Canada","staging.michaels.com/on/demandware.store/Sites-MichaelsUS-Site/backToCart","staging.michaels.com/backToCart?pid=10030152","staging.michaels.com/on/demandware.store/Sites-MichaelsUS-Site/default/COSinglePageCheckout-PaypalPayment","michaels.com/on/demandware.store/Sites-MichaelsUS-Site/default/COSinglePageCheckout-PaypalPayment","canada.michaels.com/on/demandware.store/Sites-MichaelsCA-Site/en_CA/COSinglePageCheckout-PaypalFromCart","canada.michaels.com/on/demandware.store/Sites-MichaelsCA-Site/en_CA/COSinglePageCheckout-PaypalPayment","canada.michaels.com/on/demandware.store/Sites-MichaelsCA-Site/en_CA/COSinglePageCheckout-BillingCancel","michaels.com/on/demandware.store/Sites-MichaelsUS-Site/default/COSinglePageCheckout-BillingCancel","michaels.com/on/demandware.store/Sites-MichaelsUS-Site/default/COSinglePageCheckout-PaypalFromCart"],"offer-count":8}}];
+ function findSubDomain(str, search) { return str.substring(str.length - search.length) === search } function cookiesEnabled() {
+        //detect cookies enabled from modernizr: https://github.com/Modernizr/Modernizr/blob/v3.5.0/feature-detects/cookies.js
+        try {
+            // Create cookie
+            document.cookie = "cookietest=1"; var ret = document.cookie.indexOf("cookietest=") != -1;
+            // Delete cookie
+            document.cookie = "cookietest=1; expires=Thu, 01-Jan-1970 00:00:01 GMT"; return ret
+        } catch (e) { return false }
+    }
+    //Check if the user's URL domain matches the project configuration's domain.
+    function setDomainConfiguration() {
+        try {
+            for (var configIndex = 0; configIndex < cfg.length; configIndex++) {
+                var currentConfig = cfg[configIndex]; for (var domainIndex = 0; domainIndex < currentConfig["domain-name"].length; domainIndex++) {
+                    if (currentConfig["domain-name"][domainIndex] == "*" || findSubDomain(location.hostname, currentConfig["domain-name"][domainIndex])) {
+                        cfg = currentConfig["configuration"];
+                        //If the current config has a *, we can only use the current domain of the window.  If we found a match due to the findSubDomain() function (searches the end of the hostname for what the config has) then we use the config value so that we can handle subdomains.
+                        //Most of the time, it will not be a star for the allowed domains.
+                        cfg.domain = currentConfig["domain-name"][domainIndex] == "*" ? location.hostname : currentConfig["domain-name"][domainIndex]; return true
+                    }
+                }
+            } cfg = {}; return false
+        } catch (error) { LogEtrackEvents("setDomainConfiguration JS error ", error.message, "Error") }
+    } if (!setDomainConfiguration() || !cookiesEnabled()) { cfg["etrack-disabled"] = true } window.addEventListener("beforeunload", function (e) { status.pageViewData = status.pageViewData + 1; status.pageClicks = 0; status.callEvent = 1 }, true); var url = location.href; document.body.addEventListener("click", function () {
+        try {
+            if (cfg.targetConditions.length > 0) {
+                //if (status !== undefined) {
+                status.pageClicks = status.pageClicks + 1; status.sessionClicks = status.sessionClicks + 1; status.callEvent = 2; if (url !== location.href) { status.pageViewData = status.pageViewData + 1; status.pageClicks = 0 }
+                //}
+                url = location.href; process()
+            }
+        } catch (error) { LogEtrackEvents("Click Event JS error", error.message, "Error") }
+    }); window.addEventListener("keydown", function (event) { switch (event.keyCode) { case 13: if (url !== location.href && cfg.targetConditions.length > 0) { status.pageViewData = status.pageViewData + 1; status.pageClicks = 0; status.callEvent = 2; process() }; break; default: }url = location.href }, false);
+    /*
+         
+        
+    it needs all of these keys in configuration 
+     
+         these ones get injected on the server
+    'time-before-offer': 60, 
+    'time-offer-displayed': 20,
+    'time-offer-hidden': 45,
+    'wait-time-from-window-load': 1,
+    'time-before-next-offer-from-no': 5 * 60 * 60 * 24,
+    'time-before-next-offer-from-yes': 10 * 60 * 60 * 24,
+    'time-before-next-offer-from-non-offer': 1 * 60 * 60 * 24,
+    'convert-to-purchaser-urls': ['/cart/checkout.html'],
+    'disable-invite-urls': ['/cart/index.html'],
+    'etrack-disabled':false //this is optional
+    'offer-count':10
+     
+         these ones need to be added
+    apiConsumerIdentifier: 'SMG_Test_Consumer',
+    projectId: 'SMG_ETRK',
+    serverAddress:  'http://local.api.smg.com/Etrack',
+    invitationOfferDisabled: false // false by default
+     
+         
+         */
+    //this means that everything is completely turn off and nothing happens.
+    if (cfg["etrack-disabled"] === true) { return } try {
+        var scripts = document.getElementsByTagName("script"); for (var j = 0; j < scripts.length; j++) { if (scripts[j].src && scripts[j].src.toLowerCase().indexOf("api.smg.com/etrack/sdk/") >= 0) { var parts = scripts[j].src.split("/"); cfg.apiConsumerIdentifier = parts[parts.length - 2]; cfg.projectId = parts[parts.length - 1]; cfg.serverAddress = parts[0] + "//" + parts[2] + "/" + parts[3] + "/"; break } } cfg.timeBeforeOffer = cfg["time-before-offer"]; cfg.timeOfferDisplayed = cfg["time-offer-displayed"]; cfg.timeOfferHidden = cfg["time-offer-hidden"]; cfg.waitTimeFromWindowLoad = cfg["wait-time-from-window-load"]; cfg.timeBeforeNextOfferFromNo = cfg["time-before-next-offer-from-no"]; cfg.timeBeforeNextOfferFromYes = cfg["time-before-next-offer-from-yes"]; cfg.timeBeforeNextOfferFromNonOffer = cfg["time-before-next-offer-from-non-offer"]; cfg.convertToPurchaserUrls = cfg["convert-to-purchaser-urls"]; cfg.OfferCountConfiguration = cfg["offer-count"] || 0; cfg.disableInviteUrls = cfg["disable-invite-urls"]; cfg.zIndex = cfg["z-index"];
+        //this means that it only disables showing the invitation offer UI to the user. Everything else still operates as usual.
+        cfg.invitationOfferDisabled = cfg["invitation-offer-disabled"] != null ? cfg["invitation-offer-disabled"] : false;
+        //loglevel options are Debug and Error otherwise no logging
+        cfg.logLevel = cfg["log-level"] || "none"; cfg.suppressMobileOnly = cfg["suppress-mobile-only"] || []; cfg.targetConditions = cfg["target-conditions"] || []; cfg.ClientPopupTimer = cfg["client-popup-timer"] || 30; cfg.modalCssSelector = cfg["modal-css-selector"] || ""; cfg.sessionReplayVendor = cfg["session-replay-vendor"] || "none"; cfg.desktopEmail = cfg["desktop-email"] || false; var feedbackTab
+    } catch (error) { LogEtrackEvents("setup config error ", error.message, "Error") } try {
+        var status = {
+            _persistent: [], _persistentCookieName: "_etr_p_", _session: [], _sessionCookieName: "_etr_s_", _ensureData: function () {
+                var cookie; if (status._persistent.length === 0) {
+                    cookie = status._getCookie(status._persistentCookieName); var ftvi, ftvic = status._getCookie("_etr_ft_vi_"); if (ftvic && ftvic.length && ftvic.length === 10) { ftvi = ftvic } if (cookie == null) {
+                    status._persistent = [ftvi || Math.random().toString(36).substr(2, 10),//visitorIdentifier.  see if there is already one in site intercept and use that or create one. 
+                        "0",//lastResponseToInvite
+                        "",//lastTimeOfferShown
+                        "",//lastTimeApiResponded
+                        "0"]; status._savePersistent()
+                    } else { status._persistent = cookie.split("~") }
+                } if (status._session.length === 0) {
+                    cookie = status._getCookie(status._sessionCookieName); if (cookie == null) {
+                    status._session = ["",//0 locale
+                        "0",//1 customerType
+                        "",//2 offerIdentifier
+                        "",//3 nextTimeToShowInvitation
+                        "0",//4 Holder
+                        "0",//5 pageclicks
+                        "0",//6 pageViewData
+                        "0",//7 sessionclicks
+                        ""]; status._saveSession()
+                    } else { status._session = cookie.split("~"); if (status._session.length < 8) { for (var i = 0; i <= 8; i++)status._session.add("0"); status._saveSession() } }
+                }
+            }, _getCookie: function (name) {
+                var oldCookie = null; var cookies = document.cookie.split(";"); for (var i = 0; i < cookies.length; i++) {
+                    var nv = cookies[i].trim().split("=");
+                    //Adding the domain to the cookie name
+                    if (nv[0] === name + cfg.domain) { return nv[1] } if (!oldCookie && nv[0] === name) { oldCookie = nv[1] }
+                } return oldCookie
+            }, _saveCookie: function (name, value, expires) {
+                var exp = ""; if (expires) { exp = "; expires=" + expires.toGMTString() }
+                //Adding the domain to the cookie name
+                document.cookie = name + cfg.domain + "=" + value.join("~") + exp + "; domain=" + encodeURIComponent(cfg.domain) + "; path=/"
+            }, _saveSession: function () { status._saveCookie(status._sessionCookieName, status._session, null) }, _savePersistent: function () { status._saveCookie(status._persistentCookieName, status._persistent, new Date((new Date).getTime() + 365 * 24 * 60 * 60 * 1e3)) }, _getInt: function (val) { var int = parseInt(val); return isNaN(int) ? null : int }, _getDate: function (val) { var time = status._getInt(val); return time == null ? null : new Date(time) }, _validateDate: function (val, nullOk) { if (nullOk && val == null) return; if (val == null || !val.getTime) throw "invalid value" }, _validateString: function (val) { if (/[^a-zA-Z0-9\-]/.test(val)) { throw "invalid value. cannot contain any of the characters in [^a-zA-Z0-9\\-]" } },
+            //User id. Random string, a-z, 1-9, 10 characters long.
+            get visitorIdentifier() { status._ensureData(); return status._persistent[0] },
+            //Last response to the invite from the user. int. 0 - never shown or nothing, 1 - yes, 2 - no.
+            set lastResponseToInvite(val) { if (val !== 0 && val !== 1 && val !== 2) throw "value not allowed"; status._ensureData(); status._persistent[1] = val.toString(); status._savePersistent() }, get lastResponseToInvite() { status._ensureData(); return status._getInt(status._persistent[1]) },
+            //the last time the offer was shown to the user. Date or null if never shown.
+            set lastTimeOfferShown(val) { status._validateDate(val); status._ensureData(); status._persistent[2] = val.getTime().toString(); status._savePersistent() }, get lastTimeOfferShown() { status._ensureData(); return status._getDate(status._persistent[2]) },
+            //the last time that the RequestInvitationOffer API responded. Date or null.
+            set lastTimeApiResponded(val) { status._validateDate(val); status._ensureData(); status._persistent[3] = val.getTime().toString(); status._savePersistent() }, get lastTimeApiResponded() { status._ensureData(); return status._getDate(status._persistent[3]) },
+            //last response from RequestInvitationOffer API. 0 - never called the API, 1 - offer invitation, 2 - no offer
+            set lastResponseFromApi(val) { if (val !== 0 && val !== 1 && val !== 2) throw "value not allowed"; status._ensureData(); status._persistent[4] = val.toString(); status._savePersistent() }, get lastResponseFromApi() { status._ensureData(); return status._getInt(status._persistent[4]) },
+            //the local, either from the server or set by javascript.
+            set locale(val) { status._validateString(val); status._ensureData(); status._session[0] = val || ""; status._saveSession() }, get locale() { status._ensureData(); return status._session[0] },
+            //customer type. 0 - browser, 1 - purchaser
+            set customerType(val) { if (val !== 0 && val !== 1) throw "value not allowed"; status._ensureData(); status._session[1] = val; status._saveSession() }, get customerType() { status._ensureData(); return status._getInt(status._session[1]) },
+            //the offer identifier that comes from the RequestInvitationOffer API or null if not to offer invitation.
+            set offerIdentifier(val) { status._validateString(val); status._ensureData(); status._session[2] = val || ""; status._saveSession() }, get offerIdentifier() { status._ensureData(); return status._session[2] },
+            //Next time to show invitation. Date or null if the invitation is not to be shown
+            set nextTimeToShowInvitation(val) { status._validateDate(val, true); status._ensureData(); status._session[3] = val == null ? "" : val.getTime().toString(); status._saveSession() }, get nextTimeToShowInvitation() { status._ensureData(); return status._getDate(status._session[3]) },
+            //how many times has user clicked
+            set pageClicks(val) { if (!(val >= 0)) throw "value not allowed"; status._ensureData(); status._session[5] = val.toString(); status._saveSession() }, get pageClicks() { status._ensureData(); return status._getInt(status._session[5]) },
+            //how many pages has user been to
+            set pageViewData(val) { if (!(val >= 0)) throw "value not allowed"; status._ensureData(); status._session[6] = val.toString(); status._saveSession() }, get pageViewData() { status._ensureData(); return status._getInt(status._session[6]) },
+            //how many times has user clicked
+            set sessionClicks(val) { if (!(val >= 0)) throw "value not allowed"; status._ensureData(); status._session[7] = val.toString(); status._saveSession() }, get sessionClicks() { status._ensureData(); return status._getInt(status._session[7]) },
+            //how many times has user clicked
+            set etrackClientId(val) { status._validateString(val); status._ensureData(); status._session[8] = val || ""; status._saveSession() }, get etrackClientId() { status._ensureData(); return status._session[8] },
+            //Which event caused call
+            set callEvent(val) { if (val !== 0 && val !== 1 && val !== 2) throw "value not allowed"; status._ensureData(); status._session[4] = val.toString(); status._saveSession() }, get callEvent() { status._ensureData(); return status._getInt(status._session[4]) }
+        }; if (status.lastTimeOfferShown === null) { status.lastTimeOfferShown = new Date(-1) } var tempAdditionalData = {};
+        // Service functions. Don't change the name 'svc' or it will screw up the way minification works. 
+        var svc = {
+            setClassName: function (elem, add, remove) { if (remove) { elem.className = elem.className.replace(remove, "") } elem.className = elem.className + " " + add }, getById: function (id) { return document.getElementById(id) },
+            // service method for coverting Service object properties to string
+            stringify: function (keys) { var obj = []; var i = 0; for (var key in keys) { var property = keys[key]; obj[i++] = property + ":" + (typeof this[property] === "function" ? this[property].toString() : '"' + this[property] + '"') } return "{" + obj.join(",") + "}" },
+            // check if email is correct
+            validateEmail: function (email) { var regexp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; return regexp.test(email) },
+            // check if current browser is mobile or desktop
+            isMobile: function () {
+                if (svc._isMobile == undefined) {
+                    // device detection
+                    svc._isMobile = /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0, 4))
+                } return svc._isMobile
+            },
+            // Session storage
+            /**
+                         * Session storage keys list:
+                         *      offer-popup
+                         * 
+                         */
+            sessionStoragePrefix: "etrack_", getSessionStorage: function (name) { return sessionStorage.getItem(this.sessionStoragePrefix + name) }, setSessionStorage: function (name, value) { return sessionStorage.setItem(this.sessionStoragePrefix + name, value) },
+            // HTTP requests
+            // server address
+            requestServer: cfg.serverAddress, loggingInfo: [["etr-api-consumer=" + cfg.apiConsumerIdentifier], ["etr-project-id=" + cfg.projectId], ["etr-visitor-id=" + status.visitorIdentifier]].join("&"),
+            // sending cross-domain XMLHTTP requests
+            sendRequest: function (method, address, callback, data) { var invokeCallback = function (responseText) { if (callback) { callback.call(undefined, responseText) } }; var xhttp = new XMLHttpRequest; xhttp.onreadystatechange = function () { if (xhttp.readyState === 4 && xhttp.status === 200) { invokeCallback(xhttp.responseText) } }; var logging = "?"; if (address.indexOf("?") >= 0) { logging = "&" } logging += this.loggingInfo; xhttp.open(method ? method : "POST", this.requestServer + address + logging); xhttp.send(data) }, setRequest: function (method, address, callback, data) { this.sendRequest(method, address, callback, JSON.stringify(data)) }, get: function (address, callback) { this.sendRequest("GET", address, callback) }, post: function (address, callback, data) { this.setRequest("POST", address, callback, data) },
+            // returns Service object properties, referring tp requests handling
+            getRequestProperties: function () { return ["get", "post", "put", "requestServer", "sendRequest", "setRequest", "loggingInfo"] },
+            // Visual effects
+            // show the element
+            show: function (element) { element.style.display = "block" },
+            // hide the element
+            hide: function (element) { element.style.display = "none" }, fadein: function (element) { element.style.visibility = "visible"; svc.setClassName(element, "etrack-invite-in", "etrack-invite-out") }, fadeout: function (element, goneCallback) { if (element.style.animation === undefined) { element.style.visibility = "hidden"; if (goneCallback) { goneCallback() } } else { var animEndHandler = function (ev) { element.style.visibility = "hidden"; element.removeEventListener("animationend", animEndHandler); if (goneCallback) { goneCallback() } }; element.addEventListener("animationend", animEndHandler) } svc.setClassName(element, "etrack-invite-out", "etrack-invite-in") }, activate: function (element) { element.style.opacity = 1; element.style.filter = "alpha(opacity=100)" }, deactivate: function (element, percent) {
+                // half-visible by default
+                if (typeof percent === "undefined") { percent = 50 } element.style.opacity = percent / 100; element.style.filter = "alpha(opacity=" + percent + ")"
+            },
+            // returns Service object properties, referring tp requests handling
+            getVisualProperties: function () { return ["show", "hide", "fadein", "fadeout", "activate", "deactivate"] }, customerConvertedToPurchaser: function () { if (status.customerType !== 1) { status.customerType = 1; svc.setData({ CustomerType: "purchaser" }) } }, setData: function (data) {
+                // check if we already have offer and have not taken the survey yet
+                if (!status.offerIdentifier) { for (var key in data) { tempAdditionalData[key] = data[key] } } else { svc.post("SetAdditionalData", null, { OfferIdentifier: status.offerIdentifier, AdditionalData: data }) }
+            }
+        }
+    } catch (error) { LogEtrackEvents("status svc JS error ", error.message, "Error") }
+    //get the number of seconds between a date that is now and a date that is sometime in the past. 
+    function secondsBetween(now, past) { return (now.getTime() - past.getTime()) / 1e3 } function shouldRequestInvitationOfferFromApi() {
+        try {
+            var now = new Date; var RandNum = Math.floor(Math.random() * cfg.OfferCountConfiguration); if (RandNum != 0) { return false } if (status.lastResponseFromApi === 0) {//never asked API 
+                return true
+            } var secondsFromLastApiCall = secondsBetween(now, status.lastTimeOfferShown); if (status.lastResponseFromApi === 1) {//API said YES so an invitation was offered
+                if (status.lastResponseToInvite === 1 && secondsFromLastApiCall > cfg.timeBeforeNextOfferFromYes) {
+                    //customer said YES to the API 
+                    return true
+                } if (status.lastResponseToInvite === 2 && secondsFromLastApiCall > cfg.timeBeforeNextOfferFromNo) {
+                    //customer said NO to the API
+                    return true
+                }
+            } else if (status.lastResponseFromApi === 2 && secondsFromLastApiCall > cfg.timeBeforeNextOfferFromNonOffer) {
+                //API said NO
+                return true
+            } return false
+        } catch (error) { LogEtrackEvents("shouldRequestInvitationOfferFromApi JS error ", error.message, "Error") }
+    }
+    // SDK main functions
+    function process() {
+        try {
+            var etrackClientSurveyIdentifier = ""; if (document.getElementById("eTrackClientSurveyIdentifier") !== null) etrackClientSurveyIdentifier = document.getElementById("eTrackClientSurveyIdentifier").value; status.etrackClientId = etrackClientSurveyIdentifier; var tests = "";
+            //evaluate if the targets have been met
+            tests = Processrules(cfg.targetConditions, false, tests); if (tests.length > 0) { try { var result = eval(tests) } catch (err) { result = false } }
+            // 1.   Check if need to convert user status from browser to customer
+            // current page URL
+            var currentUrl = window.location.href.toLowerCase(); for (var i = 0; i < cfg.convertToPurchaserUrls.length; i++) { if (currentUrl.indexOf(cfg.convertToPurchaserUrls[i].toLowerCase()) >= 0) { svc.customerConvertedToPurchaser() } }
+            // 2.   Check if disable-invite-urls parameter in not on.
+            for (var i = 0; i < cfg.disableInviteUrls.length; i++) { if (currentUrl.indexOf(cfg.disableInviteUrls[i].toLowerCase()) >= 0) { cfg.invitationOfferDisabled = true } } if (svc.isMobile()) { for (var i = 0; i < cfg.suppressMobileOnly.length; i++) { if (currentUrl.toLowerCase() === cfg.suppressMobileOnly[i].toLowerCase()) { cfg.invitationOfferDisabled = true } } } var rightNow = new Date; if (status.offerIdentifier) {
+                var secondsFromLastShown = secondsBetween(rightNow, status.lastTimeOfferShown); if (status.lastResponseToInvite === 1 && secondsFromLastShown < cfg.timeBeforeNextOfferFromYes) {
+                    //offer has been accepted and wait window has been shown and within time. don't need to do anything more.
+                    return null
+                } else if (status.lastResponseToInvite === 1 && secondsFromLastShown > cfg.timeBeforeNextOfferFromYes) { status.lastResponseFromApi = 0; status.lastResponseToInvite = 0; status.offerIdentifier = "" } else {
+                    // 4.   Check if offer has already been sheduled
+                    if (status.nextTimeToShowInvitation <= rightNow && status.lastResponseToInvite === 0) { showOffer() } else if (status.nextTimeToShowInvitation >= rightNow && status.lastResponseToInvite === 0 && status.callEvent === 1) { status.callEvent = 0; window.setTimeout(showOffer, status.nextTimeToShowInvitation - rightNow) } return null
+                }
+            }
+            // 5.   Define if need to ask server for invitation permission
+            if (shouldRequestInvitationOfferFromApi()) {
+                var rioPost = { ApiConsumerIdentifier: cfg.apiConsumerIdentifier, ProjectId: cfg.projectId, VisitDate: formattedNow(), VisitorIdentifier: status.visitorIdentifier, SessionReplayInfo: getSessionReplayInfo(), AdditionalData: { DeviceType: svc.isMobile() ? "mobile" : "desktop", ClientSite: window.location.hostname, RulesPassed: "OfferCount", TargetResult: result } }; for (var key in tempAdditionalData) { rioPost.AdditionalData[key] = tempAdditionalData[key] } tempAdditionalData = {};
+                // call server if need to make the offer
+                status.lastResponseFromApi = 2; svc.post("RequestInvitationOffer", function (response) {
+                    var resp = JSON.parse(response); if (!resp.OfferIdentifier) { LogEtrackEvents("Invitation Requested", "No Invitation", "Debug"); status.lastResponseFromApi = 2 } else {
+                        LogEtrackEvents("Invitation Requested", "Invitation received", "Debug"); status.lastResponseFromApi = 1;
+                        // save the locale
+                        if (!status.locale) { status.locale = resp.Locale }
+                        // save the offer id
+                        status.offerIdentifier = resp.OfferIdentifier; var showOfferDelay = cfg.timeBeforeOffer * 1e3; status.nextTimeToShowInvitation = new Date((new Date).getTime() + showOfferDelay); window.setTimeout(showOffer, showOfferDelay)
+                    }
+                    // set the last API response time
+                    status.lastTimeApiResponded = new Date
+                }, rioPost)
+            }
+        } catch (error) { LogEtrackEvents("process JS error ", error.message, "Error") }
+    }
+    // show the offer to user
+    function showOffer() {
+        try {
+            if (cfg.invitationOfferDisabled === true) { return false } var cache = svc.getSessionStorage("offer-popup"); if (cache && cache !== "undefined") { return createOfferPopup(cache) }
+            // no cache - need to get from server
+            return svc.get("InvitationUiScreens?" + "projectId=" + cfg.projectId + "&locale=" + status.locale + (svc.isMobile() || cfg.desktopEmail === true ? "&screenNames[0]=mobile-invitation" : "&screenNames[0]=desktop-invitation&screenNames[1]=desktop-wait"), function (response) {
+                // pass data to offer popup showing function
+                //data = JSON.parse(response);
+                createOfferPopup(response);
+                // save data in cache
+                svc.setSessionStorage("offer-popup", response/*data*/)
+            })
+        } catch (error) { LogEtrackEvents("showOffer JS error ", error.message, "Error") }
+    } function delayForPopup() { status.nextTimeToShowInvitation = new Date((new Date).getTime() + cfg.ClientPopupTimer * 1e3); var waitTimeFromWindowLoad = 1e3 * Math.abs(parseInt(cfg.ClientPopupTimer)) || 30; window.setTimeout(showOffer, waitTimeFromWindowLoad) } function createOfferPopup(offerPopupsData) {
+        try {
+            if (document.getElementById("smg-etr-invitation-container") === null) {
+                var data = JSON.parse(offerPopupsData); var elementName = svc.isMobile() || cfg.desktopEmail === true ? "mobile-invitation" : "desktop-invitation"; var offerDiv = document.createElement("div"); offerDiv.id = "smg-etr-invitation-container"; offerDiv.style.position = "absolute";//positioning here needs to be set for the stacking context to work. 
+                offerDiv.style.top = "0"; offerDiv.style.left = "0"; offerDiv.style.zIndex = cfg.zIndex || 1e4; offerDiv.innerHTML = data[elementName]; document.getElementsByTagName("body")[0].appendChild(offerDiv)
+            } showOfferPopup()
+        } catch (error) { LogEtrackEvents("createOfferPopup JS error ", error.message, "Error") }
+    } var timeouts = { showOffer: null, hideOffer: null }; function isBlockedByModal() {
+        var shouldBlock = false; if (cfg.modalCssSelector !== "") {
+            var elements = document.querySelectorAll(cfg.modalCssSelector); if (elements !== null) {
+                for (var i = 0; i < elements.length; i++) {
+                    var el = elements[i]; var style = window.getComputedStyle(el); if (el.offsetParent !== null || style.display !== "none" || style.visibility === "visible" && style.display !== "none") {//Found that if you set display to none the visibility could linger as visible.
+                        shouldBlock = true
+                    }
+                }
+            }
+        } return shouldBlock
+    } function serialize(obj) { var str = []; for (var p in obj) if (obj.hasOwnProperty(p)) { str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p])) } return str.join("&") } function showOfferPopup() {
+        try {
+            if (feedbackTab && feedbackTab.isActive) { return } if (isBlockedByModal()) { delayForPopup(); return } if (feedbackTab && typeof feedbackTab.disable == "function") { feedbackTab.disable() } var popup = svc.getById("smg-etr-invitation"); var width = Math.min(600, window.innerWidth); var left = window.innerWidth / 2 - width / 2; popup.style.width = width + "px"; popup.style.bottom = "0px"; popup.style.left = left + "px";
+            // initialize all the popup buttons, controls and events
+            // decline offer
+            svc.getById("smg-etr-invitation-close").onclick = sayNoToOffer; svc.getById("smg-etr-invitation-no").onclick = sayNoToOffer;
+            // say yes to offer
+            svc.getById("smg-etr-invitation-yes").onclick = sayYesToOffer;
+            // show the popup
+            svc.fadein(popup); status.lastTimeOfferShown = new Date; LogEtrackEvents("Pop up", "Pop up presented", "Debug");
+            //Need to set this cookie outside of the timeouts
+            //This is to fix clicking on a link while the popup is open and having the popup show right away on the next page.
+            //This adds the time the offer is displayed with the hidden amount since if they don't click on it, that would be the next time.
+            status.nextTimeToShowInvitation = new Date((new Date).getTime() + (cfg.timeOfferDisplayed + cfg.timeOfferHidden) * 1e3);
+            // hide the offer popup after timeout
+            timeouts.hideOffer = window.setTimeout(function () {
+                svc.fadeout(popup, function () { if (feedbackTab && typeof feedbackTab.enable == "function") { feedbackTab.enable() } });
+                // schedule the next time to show invitation
+                timeouts.showOffer = window.setTimeout(function () { showOfferPopup() }, cfg.timeOfferHidden * 1e3)
+            }, cfg.timeOfferDisplayed * 1e3)
+        } catch (error) { LogEtrackEvents("showOfferPopup JS error ", error.message, "Error") }
+    } function removePopup() {
+        try {
+            // Make the offer go away and remove it from the dom.
+            svc.fadeout(svc.getById("smg-etr-invitation"), function () { svc.getById("smg-etr-invitation-container").parentNode.removeChild(svc.getById("smg-etr-invitation-container")); if (feedbackTab && typeof feedbackTab.enable == "function") { feedbackTab.enable() } }); return false
+        } catch (error) { LogEtrackEvents("removePopup JS error ", error.message, "Error") }
+    } function closeOffer(agree) {
+        try {
+            //Moving the cookie setting to before the post since client updates should be completed before updating the server
+            //This usually runs so fast this shouldn't matter, but just incase.
+            var offerId = status.offerIdentifier;
+            // clear the offer identifier
+            if (!agree) { LogEtrackEvents("Pop up Acknowledgment", "dismissed", "Debug"); status.offerIdentifier = "" }
+            // save cookie value
+            status.lastResponseToInvite = agree ? 1 : 2; removePopup();
+            // clear the show and hide timeouts
+            window.clearTimeout(timeouts.showOffer); window.clearTimeout(timeouts.hideOffer);
+            // call the api to save the user answer
+            svc.post("SetOfferAccepted", null, { OfferIdentifier: offerId, OfferAccepted: agree }); return false
+        } catch (error) { LogEtrackEvents("closeOffer JS error ", error.message, "Error") }
+    } function sayYesToOffer(e) {
+        try {
+            e.preventDefault();
+            // open the send email screen
+            if (svc.isMobile() || cfg.desktopEmail === true) {
+                LogEtrackEvents("Pop up Acknowledgment Mobile", "accepted", "Debug");
+                // hide the buttons, show the email
+                svc.hide(svc.getById("smg-etr-mobile-question")); svc.show(svc.getById("smg-etr-mobile-email"));
+                // erase time intervals for showing-hiding the popup, because now it's being shown permanently
+                window.clearTimeout(timeouts.showOffer); window.clearTimeout(timeouts.hideOffer);
+                // set the email screen handlers
+                // disable the 'Send' button until user tyopes in the valid email
+                svc.getById("smg-etr-email-send").style["pointer-events"] = "none"; svc.deactivate(svc.getById("smg-etr-email-send"));
+                // set the on-input handle for email field
+                var input = svc.getById("smg-etr-email-address"); input.oninput = handleEmailInput; input.onkeyup = handleEmailInput;
+                // set the button handler
+                svc.getById("smg-etr-email-send").onclick = function (e) { e.preventDefault(); sendEmailWithValidation(input.value.trim()); return false };
+                // open the wait screen
+            } else {
+                LogEtrackEvents("Pop up Acknowledgment", "accepted", "Debug"); closeOffer(true); var waitWindow = window.open("", "etrackSurveyHost", "scrollbars=yes,width=830,height=600"); if (waitWindow) {
+                    var waitDocument = waitWindow.document; var windowContent = JSON.parse(svc.getSessionStorage("offer-popup"))["desktop-wait"]; waitDocument.body.innerHTML = windowContent; waitWindow.projectId = cfg.projectId; waitWindow.offerIdentifier = status.offerIdentifier; waitWindow.locale = status.locale; waitWindow.etrackClientSurveyIdentifier = status.etrackClientId; var getSurveyReady = function () {
+                        var interval = window.setInterval(function () {
+                            try {
+                                if (window.opener.location.href) {
+                                    //if I can't get here then the window was closed or navigated to a different site. 
+                                    return false
+                                }
+                            } catch (e) { } window.clearInterval(interval); svc.hide(document.getElementById("smg-etr-survey-wait")); svc.show(document.getElementById("smg-etr-survey-ready")); svc.get("GetSurveyUrl?" + "projectId=" + encodeURIComponent(projectId) + "&offerIdentifier=" + encodeURIComponent(offerIdentifier) + "&locale=" + encodeURIComponent(locale), function (response) {
+                                // set the begin survey button handler function
+                                document.getElementById("smg-etr-begin-survey").onclick = function (e) {
+                                    e.preventDefault(); var location = JSON.parse(response).Url + "&client-survey-identifier=" + encodeURIComponent(etrackClientSurveyIdentifier);
+                                    //For lower environments
+                                    if (location.indexOf("wse.smg.com") > 0) location = location.replace("&/?", "&"); window.location = location
+                                }
+                            })
+                        }, 2e3)
+                    }; var script = waitDocument.createElement("script"); script.type = "text/javascript";
+                    // inject the function to bootstrap the ready waiting survery window
+                    var code = "var getReady = " + getSurveyReady.toString() + ";";
+                    // copy the needed service methods from parent window
+                    code += "var svc = " + svc.stringify(svc.getRequestProperties().concat(svc.getVisualProperties()));
+                    // inject the JS code into popup's DOM
+                    try { script.appendChild(waitDocument.createTextNode(code)); waitDocument.body.appendChild(script) } catch (e) { LogEtrackEvents("sayYesToOffer append child JS error ", e.message, "Error"); script.text = code; waitDocument.body.appendChild(script) }
+                    // call anonymous function to bootstrap the ready waiting survery window
+                    waitWindow.getReady()
+                }
+            } return false
+        } catch (error) { LogEtrackEvents("sayYesToOffer JS error ", error.message, "Error") }
+    } function sayNoToOffer(e) { e.preventDefault(); closeOffer(false); return false } function sendEmailWithValidation(email) {
+        try {
+            // validate email and show message if needed
+            if (toggleEmailValidationMessages(email)) {
+                // hide email screen
+                svc.hide(svc.getById("smg-etr-mobile-email"));
+                // show the thanks screen
+                svc.show(svc.getById("smg-etr-mobile-thanks"));
+                // add close handler to thans screen
+                svc.getById("smg-etr-invitation-close").onclick = function (e) { e.preventDefault(); removePopup() }; var fadeout = parseInt(svc.getById("smg-etr-invitation").getAttribute("data-auto-fade-out")); if (isNaN(fadeout)) { fadeout = 5e3 } window.setTimeout(removePopup, fadeout);
+                // finally save the user answer to server
+                svc.post("SendEmailedSurvey", null, { ProjectId: cfg.projectId, OfferIdentifier: status.offerIdentifier, EmailAddress: email, Locale: status.locale }); status.lastResponseToInvite = 1; return true
+            } return false
+        } catch (error) { LogEtrackEvents("sendEmailWithValidation JS error ", error.message, "Error") }
+    } function hideEmailValidationMessages() { svc.hide(svc.getById("smg-etr-email-missing")); svc.hide(svc.getById("smg-etr-email-invalid")) } function getSessionReplayInfo() { var vendor = cfg.sessionReplayVendor; var templateVariables = {}; try { if (vendor === "mouseflow") { var sessionId = mouseflow.getSessionId(); sessionId = sessionId == "-1" ? "" : sessionId; templateVariables = { siteid: mouseflow.websiteId, sessionid: sessionId } } else if (vendor === "fullstory") { var sessionInfo = window[window._fs_namespace].getCurrentSessionURL(); templateVariables = { siteid: sessionInfo, sessionUrl: sessionInfo } } else { var invalidVendor = vendor; vendor = "none"; throw "Intercept - Failed to getSessionReplayInfo(). Invalid session replay vendor: " + invalidVendor } } catch (e) { LogEtrackEvents("getSessionReplayInfo error: " + e, e, "Error") } return { Vendor: vendor, TemplateVariables: templateVariables } } function toggleEmailValidationMessages(email) {
+        try {
+            // empty email value case
+            if (!email) {
+                svc.show(svc.getById("smg-etr-email-missing")); svc.hide(svc.getById("smg-etr-email-invalid")); return false;
+                // non-valid email value case
+            } else if (!svc.validateEmail(email)) {
+                svc.hide(svc.getById("smg-etr-email-missing")); svc.show(svc.getById("smg-etr-email-invalid")); return false;
+                // email is correct
+            } else { hideEmailValidationMessages() } return true
+        } catch (error) { LogEtrackEvents("toggleEmailValidationMessages JS error ", error.message, "Error") }
+    } function handleEmailInput(e) {
+        try {
+            var value = e.target.value.trim(); if (e.keyCode === 13) { sendEmailWithValidation(value); return }
+            // activate or deactivate the send button
+            // and hide all the warning messages if email is correct
+            if (value.length && svc.validateEmail(value)) { svc.activate(svc.getById("smg-etr-email-send")); svc.getById("smg-etr-email-send").style["pointer-events"] = "auto" } else { svc.deactivate(svc.getById("smg-etr-email-send")); svc.getById("smg-etr-email-send").style["pointer-events"] = "none" } hideEmailValidationMessages()
+        } catch (error) { LogEtrackEvents("handleEmailInput JS error ", error.message, "Error") }
+    } function formattedNow() {
+        var now = new Date; return now.getFullYear() + "-" + pad2(now.getMonth() + 1) + "-" + pad2(now.getDate()) + " " + pad2(now.getHours()) + ":" + pad2(now.getMinutes()) + ":" + pad2(now.getSeconds()) + "Z";
+        // always returns a string
+        function pad2(n) { return (n < 10 ? "0" : "") + n }
+    } try {
+        // API functionality
+        //defines the public API surface.
+        var apiSurface = {
+            getStatus: function () { return { lastResponseToInvite: status.lastResponseToInvite, locale: status.locale, nextTimeToShowInvitation: status.nextTimeToShowInvitation, offerIdentifier: status.offerIdentifier, customerType: status.customerType, lastResponseFromApi: status.lastResponseFromApi, lastTimeApiResponded: status.lastTimeApiResponded, lastTimeOfferShown: status.lastTimeOfferShown, visitorIdentifier: status.visitorIdentifier } },
+            // sends some user data to server
+            setData: function (data) { svc.setData(data) },
+            // switches customer type from browser (0) to purchaser (1)
+            customerConvertedToPurchaser: function () { svc.customerConvertedToPurchaser() },
+            // disables the abiltity to offer user survey invitations
+            disableInvitationOffer: function () { cfg.invitationOfferDisabled = true },
+            // enables the abiltity to offer user survey invitations
+            enableInvitationOffer: function () { cfg.invitationOfferDisabled = false },
+            // sets the list of paths, matching which our SDK automatically converts user to customer
+            setConversionPaths: function (paths) { cfg.convertToPurchaserUrls = paths },
+            // sets the list of paths, matching which our SDK automatically disables offering invitaions
+            setInvitationOfferDisabledPaths: function (paths) { cfg.disableInviteUrls = paths },
+            // sets the locale
+            setLocale: function (locale) { status.locale = locale }, getConfiguration: function () { return cfg }
+        };
+        // delaying the main process function to start
+        var waitTimeFromWindowLoad = 1e3 * Math.abs(parseInt(cfg.waitTimeFromWindowLoad)) || 5; window.setTimeout(function () { var ev = document.createEvent("CustomEvent"); ev.initCustomEvent("smgetr:interceptReady", true, true, apiSurface); document.dispatchEvent(ev); process() }, waitTimeFromWindowLoad)
+    } catch (error) { LogEtrackEvents("API functionality JS error ", error.message, "Error") }
+    //adjust behavior if the feedback tab is also on the site.
+    function feedbackTabListener(e) {
+        if (e.type === "smgetr:feedbackTabReady") {
+            feedbackTab = e.detail;//capture the API
+        } else if (e.type === "smgetr:feedbackActivated") {
+        feedbackTab.isActive = true;//store that the feedback has been activated so that I won't show the invitation.
+        } else if (e.type === "smgetr:feedbackSubmitted" && e.detail.wasSent) {
+            // if feedback was actually sent then act like the invitation API responded no. This will prevent it from calling the API and from showing the invite for an amount of time. 
+            status.lastTimeApiResponded = new Date; status.lastResponseFromApi = 2; status.offerIdentifier = ""
+        }
+        //console.log("from intercept", e.type);
+    } function Processrules(rule, concat, tests) {
+        try {
+            if (rule.length > 0) tests = tests + "("; for (var i = 0; i < rule.length; i++) {
+                var currrentrule = rule[i]; switch (currrentrule.condition_test) { case "NumericTest": var testvalue = 0; switch (currrentrule.condition_name) { case "pageViews": testvalue = status.pageViewData; break; case "pageClicks": testvalue = status.pageClicks; break; case "sessionClicks": testvalue = status.sessionClicks; break; default: testvalue = 0 }tests = NumericTest(testvalue, currrentrule.condition_variable, currrentrule.condition_logic, tests); break; case "targetDevice": tests = targetDevice(currrentrule.condition_variable, tests); break; case "UrlStringTest": var testurl = currrentrule.condition_variable.toString().toLowerCase(); if (testurl.match("/$")) testurl = testurl.substring(0, testurl.length - 1); var currentUrl = window.location.href.toLowerCase(); if (currentUrl.match("/$")) currentUrl = currentUrl.substring(0, currentUrl.length - 1); tests = StringTest(testurl, currrentrule.condition_logic, currentUrl, tests); break }if (currrentrule.grouped_with.length > 0) {
+                    //tests = tests + ' && ';
+                    tests = spinRules(currrentrule.grouped_with, true, tests) + ")"
+                } if (i != rule.length - 1) tests = tests + " || "
+            } if (rule.length > 0) tests = tests + ")"; return tests
+        } catch (error) { LogEtrackEvents("Processrules JS error ", error.message, "Error") }
+    } function spinRules(ruleGroupedTest, nested, tests) {
+        for (var i = 0; i < ruleGroupedTest.length; i++) { tests = ProcessSubrules(ruleGroupedTest[i], nested, tests); nested = false } return tests;// + ')';
+    } function ProcessSubrules(rule, concat, tests) { try { if (concat) tests = tests + " && ("; else tests = tests + " || "; switch (rule.condition_test) { case "NumericTest": var testvalue = 0; switch (rule.condition_name) { case "pageViews": testvalue = status.pageViewData; break; case "pageClicks": testvalue = status.pageClicks; break; case "sessionClicks": testvalue = status.sessionClicks; break; default: testvalue = 0 }tests = NumericTest(testvalue, rule.condition_variable, rule.condition_logic, tests); break; case "targetDevice": tests = targetDevice(rule.condition_variable, tests); break; case "UrlStringTest": var testurl = rule.condition_variable.toString().toLowerCase(); if (testurl.mathc("/$")) testurl = testurl.substring(0, testurl.length - 1); var currentUrl = window.location.href.toLowerCase(); if (currentUrl.match("/$")) currentUrl = currentUrl.substring(0, currentUrl.length - 1); tests = StringTest(testurl, rule.condition_logic, currentUrl, tests); break }if (rule.grouped_with.length > 0) tests = spinRules(rule.grouped_with, true, tests) + ")"; return tests } catch (error) { LogEtrackEvents("ProcessSubrules JS error ", error.message, "Error") } } function NumericTest(testvalue, criteria, logic, tests) { try { switch (logic) { case "=": if (testvalue === criteria) { tests = tests + " true" } else { tests = tests + " false" } break; case ">": if (testvalue > criteria) { tests = tests + " true" } else { tests = tests + " false" } break; case "<": if (testvalue < criteria) { tests = tests + " true" } else { tests = tests + " false" } break; case ">=": if (testvalue >= criteria) { tests = tests + " true" } else { tests = tests + " false" } break; case "<=": if (testvalue <= criteria) { tests = tests + " true" } else { tests = tests + " false" } break; default: tests = tests + " false" }return tests } catch (error) { LogEtrackEvents("NumericTest JS error ", error.message, "Error") } } function targetDevice(criteria, tests) { try { switch (criteria.toLowerCase()) { case "desktop": if (!svc.isMobile()) { tests = tests + " true" } else { tests = tests + " false" }; break; case "mobile": if (svc.isMobile()) { tests = tests + " true" } else { tests = tests + " false" }; break; default: tests = tests + " false" }return tests } catch (error) { LogEtrackEvents("targetDevice test JS error ", error.message, "Error") } } function StringTest(criteria, logic, teststring, tests) { try { criteriatotest = criteria.toLowerCase(); stringtotest = teststring.toLowerCase(); switch (logic.toLowerCase()) { case "matches exactly": if (stringtotest === criteriatotest) { tests = tests + " true" } else { tests = tests + " false" } break; case "contains": if (stringtotest.indexOf(criteriatotest) >= 0) { tests = tests + " true" } else { tests = tests + " false" } break; case "starts with": var restart = new RegExp("^", criteriatotest); if (stringtotest.match(restart)) { tests = tests + " true" } else { tests = tests + " false" } break; case "ends with": var reends = new RegExp(criteriatotest, "$"); if (stringtotest.match(reends)) { tests = tests + " true" } else { tests = tests + " false" } break; default: return false }return tests } catch (error) { LogEtrackEvents("UrlStringTest JS error ", error.message, "Error") } } function LogEtrackEvents(eventData, result, logLevel) { if (cfg.logLevel === undefined) return; if (cfg.logLevel.toLowerCase() === logLevel.toLowerCase() || cfg.logLevel.toLowerCase() === "debug" && logLevel.toLowerCase() === "error") { var logPost = { ApiConsumerIdentifier: cfg.apiConsumerIdentifier, ProjectId: cfg.projectId, EventDate: formattedNow(), VisitorIdentifier: status.visitorIdentifier, Event: eventData, CookieData: "persistant Cookie: " + status._getCookie(status._persistentCookieName) + " Session Cookie: " + status._getCookie(status._sessionCookieName), Result: result }; svc.post("Logging", function (response) { var resp = JSON.parse(response); return resp }, logPost) } } document.addEventListener("smgetr:feedbackActivated", feedbackTabListener); document.addEventListener("smgetr:feedbackSubmitted", feedbackTabListener); document.addEventListener("smgetr:feedbackTabReady", feedbackTabListener)
+})();

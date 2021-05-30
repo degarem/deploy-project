@@ -1,0 +1,64 @@
+.shopping-element__name{
+    
+    padding: var(--spacing-medium);
+    font-weight: bolder; 
+}
+.shopping-element__price{
+    padding:var(--spacing-medium);
+}
+.shopping-container{
+    width: 100%;
+    position: absolute;
+    max-height: max-content;
+    height:100%;
+    top:50%;
+    left: 50%;
+    margin: auto;
+    transform: translate(-50%,-50%);
+    padding: var(--spacing-large);
+    background-color:var(--color-black);
+    
+
+}
+.shopping_close{
+    position:absolute ;
+    width: 35px;
+    height: 20px;
+    top:20px;
+    right: 20px;
+    background-image: url(img/cancel.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+
+}
+.shopping-element__img{
+    position: relative;
+    display: inline-block;
+    width: 120px;
+    height: 90px;
+    border: 4px yellow solid;
+    position: relative;
+    margin-top: 4%;
+    border-radius: 15px;
+}
+.buyButton{
+    position:fixed;
+    left: 80%;
+    bottom: 8%;
+    cursor: pointer;
+    align-items: center;
+    background-color: yellow;
+    border-radius: 20px;
+    width: 120px;
+    height: 40px;
+    font-family: fantasy;
+    animation: 800ms linear 0s infinite alternate fuckDontCleap;
+}
+.buyButton:hover{
+    color:yellow;
+    border:yellow 2px solid;
+    background-color: black;
+
+}
+@keyframes fuckDontCleap { from { opacity:1; } to { opacity: 0.1; }  }

@@ -1,0 +1,116 @@
+body {
+	max-height: max-content;
+    max-width: 100%;
+	margin: 0 auto;
+	padding: 0;
+	background: linear-gradient(180deg, yellow 60%, black 40%);
+	font-family: 'Reggae One', cursive;
+	text-align: center;
+	line-height: 30px;
+}
+.maps{
+
+	line-height: 30px;
+	color: yellow;
+	top:115px;
+	max-width: 100%;
+	position: relative;
+    margin: 0 auto;
+	max-height: max-content;
+}
+.icon{
+	height: 74px;
+	float: left;
+	
+}
+.headImage{
+	float: left;
+	position: relative;
+	width: 793px;
+	margin: 0 auto;
+	max-height: 70px;
+	
+}
+.buttonstyle{
+	float: right;
+	background-color: black;
+	color:yellow;
+	height: 70px;
+	text-align:center;
+	width: 70px;
+	line-height: 60px;
+	font-family: 'Amatic SC',cursive; 
+	font-size: 20px;
+	position: -webkit-sticky;
+	border: black 2px solid;
+}
+.buttonstyle2{
+	float: right;
+	background-color: yellow;
+	color:black;
+	height: 70px;
+	display: inline;
+	text-align:center;
+	width: 70px;
+	line-height: 60px; 
+	font-family: 'Amatic SC',cursive; 
+	font-size: 20px;
+	position:-webkit-sticky;
+	display: inline;
+	border: black 2px solid;
+	
+}
+
+header{
+	margin: auto 0;
+	padding: 0;
+	height: 70px;
+	border: black 2px solid;
+	background-color: yellow;
+	position: relative;
+	bottom: 5px;
+	display: block;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+	sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+::-webkit-scrollbar{
+    min-width: 10px;
+}
+::-webkit-scrollbar-thumb{
+    background-color: yellow;
+	border: 2px black solid;
+
+}
+::-webkit-scrollbar-track{
+    background-color: black;
+}
+footer{
+top:100px;	
+margin: auto 0;
+max-width: 100%;
+background-color: yellow;
+max-height: max-content;
+position: relative;
+top: 132px;
+border: black dashed 2px;
+
+}
+.iconFoot{
+	position: relative;
+	top: 15px;
+	max-height: 50px;
+}
+.iconS{
+	position: relative;
+	max-height: 30px;
+	margin: 0 autos;
+	top:15px;
+	padding: 15px 15px;
+}
+.aFooter{
+	text-decoration: none;
+	color: black;
+	cursor: pointer;
+	
+}
+

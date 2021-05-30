@@ -1,41 +1,47 @@
     header{
         margin: auto 0;
         padding: 0;
-        height: 72px;
-        background-color: white;
+        height: 70px;
+        border: black 5px solid;
+        background-color: yellow;
+        position: relative;
+        bottom: 5px;
         display: block;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-            sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+        sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
     }
-    body{
-        
-        height: 100%;
+    body {
+        height: 100vh;
+        max-width: 1500px;
         margin: 0 auto;
-        background-image: url(backim.png);
-        position: relative;
-        
-        
+        padding: 0;
+        background: linear-gradient(90deg, #000 50%, yellow 50%);
+        font-family: 'PT Sans', sans-serif;
     }
     .icon{
-        height: 70px;
+        height: 74px;
+        float: left;
+        
     }
     .headImage{
         position: relative;
-        left: 2%;
+        width: 793px;
+        margin: 0 auto;  
+        max-height: 70px;
+        
     }
     .buttonstyle{
         float: right;
         background-color: black;
         color:yellow;
         height: 70px;
-        display: inline;
         text-align:center;
         width: 70px;
         line-height: 60px;
         font-family: 'Amatic SC',cursive; 
         font-size: 20px;
-        position: relative;
-        display: inline;
+        position: -webkit-sticky;
+        border: black 2px solid;
     }
     .buttonstyle2{
         float: right;
@@ -48,20 +54,23 @@
         line-height: 60px; 
         font-family: 'Amatic SC',cursive; 
         font-size: 20px;
-        position: relative;
+        position:-webkit-sticky;
         display: inline;
+        border: black 2px solid;
         
     }
 
     .bodyIcon{
-        height: 100px;
-        width: 700px ;
+        height: 70px;
+        width: 300px ;
         display: flex;
         justify-content: center;   
         position: relative;
-        left:25%;
+        margin: 0 auto;
         font-family: 'Amatic SC',cursive;
-        top: 30px;    
+        top: 30px;
+        
+        border: yellow 3px solid;    
         
     }
     .fixIcon{
@@ -82,6 +91,7 @@
         background-color: yellow;
         color: black;
         top: 40px;
+        border: solid 3px black;
         
         
     }
@@ -92,6 +102,10 @@
         color: yellow;
         height: 100px;
         margin-top: -10px;
+        position: relative;
+        bottom  :15%;
+        border: black 3px solid;
+        left: 3px;
     }
     .mainButton{
     background-color: black;
@@ -111,6 +125,7 @@
         display: inline-block;
         top: 134px;
         left: 25%;
+        border: 3px solid black ;
 
     }
     .galleryVault{
@@ -125,7 +140,7 @@
         display: -ms-flex;
         display: flex;
         justify-content: center;
-        min-height: 100vh;
+        max-height: 100vh;
         top: 250px;
         width: 1000px;
     }
@@ -225,29 +240,31 @@
         to { opacity: 0.4; }
     }
 
-    .autoplay:active
-    {
-    transform:scale(0.6);
-    }
+
 footer{
     height: 200px;
     max-width: 100%;
     background-color: yellow;
     position: relative;
-    top:200px;
+    top:300px;
     justify-content: center ;
     display: flex;
     align-items: center;
 justify-content: center;
 text-align: center;
+border: black 3px solid;
+margin: 0 auto;
+
 
 }
 .iconFoot img{
-    display: flex;
     height: 60px;
     width: 200px;
     position: relative;
     bottom: 30px;
+    margin: auto 0; 
+    left: 40px;
+
 }
 .iconS img{
     
@@ -256,7 +273,7 @@ text-align: center;
     height: 25px;
     position: relative;
     top:40px;
-    right: 150px;
+    right: 110px;
 }
 .logoFB img{
     
@@ -265,7 +282,7 @@ text-align: center;
     height: 25px;
     position: relative;
     top:40px;
-    right: 130px;
+    right: 90px;
 }
 .logoGM img{
     display: inline-block;
@@ -273,7 +290,7 @@ text-align: center;
     height: 25px;
     position: relative;
     top:40px;
-    right: 110px;
+    right: 70px;
 }
 .aFooter{
     display: inline-block;
@@ -281,7 +298,17 @@ text-align: center;
     height: 25px;
     position: relative;
     top:70px;
-    right:270px;
+    right:230px;
     font-family: 'Kelly Slab', cursive;
     color: black;
+}
+::-webkit-scrollbar{
+    min-width: 8px;
+}
+::-webkit-scrollbar-thumb{
+    background-color: black;
+
+}
+::-webkit-scrollbar-track{
+    background-color: yellow;
 }
