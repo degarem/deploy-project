@@ -8,7 +8,7 @@ const CATALOG = [
     {
         id: 'el2',
         name: 'Sketchbook draw comics',
-        img: 'https://i.ibb.co/M1g4C0g/sketchbook-comix-11.jpg',
+        img: 'https://i.ibb.co/jD1x1LR/pattern-img3.png',
         price: 300,
     },
     {

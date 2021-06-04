@@ -8,13 +8,13 @@ const CATALOG = [
     {
         id: 'el2',
         name: 'Sketchbook draw comics',
-        img: 'https://i.ibb.co/M1g4C0g/sketchbook-comix-11.jpg',
+        img: "https://i.ibb.co/YB74J90/img3.png",
         price: 300,
     },
     {
         id: 'el3',
         name: 'Canson® XL® Black Drawing Pad',
-        img: 'https://i.ibb.co/M1g4C0g/sketchbook-comix-11.jpg',
+        img: 'https://i.ibb.co/m6D1JD1/img4.jpg',
         price: 40000,
     },
     {
@@ -44,13 +44,13 @@ const CATALOG = [
     {
         id: 'el9',
         name: 'Canson® XL® Black Drawing Pad',
-        img: 'https://i.ibb.co/fvmKSwm/10479588.jpg',
+        img: 'https://i.ibb.co/4FZxKNW/img1.jpg" ',
         price: 400,
     },
     {
         id: 'el10',
         name: 'Canson® XL® Black Drawing Pad',
-        img: 'https://i.ibb.co/fvmKSwm/10479588.jpg',
+        img: 'https://i.ibb.co/4FZxKNW/img1.jpg" ',
         price: 400,
     },
     {
